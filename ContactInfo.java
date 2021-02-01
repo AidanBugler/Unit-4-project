@@ -5,7 +5,14 @@ public class ContactInfo
   private long phoneNumber;
   private String contactEmail;
   private int contactAge;
-
+  
+  private String fullName;
+  
+  public String getFullName()
+  {
+    return (firstName+" "+lastName);
+  }
+  
   public String getFirstName()
   {
     return firstName;
