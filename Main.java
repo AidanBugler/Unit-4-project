@@ -73,7 +73,7 @@ class Main {
       }
     }
 
-  return remainderNumberSortMethod(contactList,arrLength-1);
+  return remainderNameSortMethod(contactList,arrLength-1);
   }
 
 
@@ -120,6 +120,7 @@ String tempPhoneNumber;
   System.out.println("5. Exit the Daily Bugle");
   System.out.println(); 
   userInput=Integer.parseInt(input.nextLine());
+  System.out.println(); 
     if (userInput == 1)
     {
       ContactInfo contact  = new ContactInfo();
