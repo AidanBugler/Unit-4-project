@@ -7,6 +7,35 @@ import java.util.ArrayList;
 
 class Main {
 
+  static int binarySearchMethod(ArrayList <ContactInfo> contactList,String key)
+  { 
+    int mid = contactList.size() /2;
+    int first =0;
+    int last = contactList.size()-1;
+
+    while (first<=last)
+    {
+      if (contactList.get(mid).getFullName().compareTo(key)<0)
+      {
+        first =mid +1;
+      }
+      else if (contactList.get(mid).getFullName().equals(key))
+      {
+       return mid; 
+      }
+      else
+      {
+        last = mid-1;
+      }
+      mid =(first+last)/2;
+      if (first>last)
+      {
+        return -1;
+      } 
+    }
+  return -1;
+  }
+
   static ArrayList<ContactInfo> remainderNumberSortMethod(ArrayList <ContactInfo> contactList, int arrLength)
   {
     if (arrLength==0)
@@ -26,6 +55,27 @@ class Main {
 
   return remainderNumberSortMethod(contactList,arrLength-1);
   }
+
+  static ArrayList<ContactInfo> remainderNameSortMethod(ArrayList <ContactInfo> contactList, int arrLength)
+  {
+    if (arrLength==0)
+    {
+      return contactList;
+    }
+    ContactInfo info;
+    for (int i = 0; i < arrLength-1; i++) 
+    {
+      if (contactList.get(i).getFullName().compareTo(contactList.get(i + 1).getFullName()) > 0) 
+      {
+      info = contactList.get(i);
+      contactList.set(i,contactList.get(i+1));
+      contactList.set(i+1,info);
+      }
+    }
+
+  return remainderNumberSortMethod(contactList,arrLength-1);
+  }
+
 
   public static void main(String[] args) throws IOException {
 
@@ -55,7 +105,7 @@ class Main {
     }
     myReader.close();
 
-int userImput;
+int userInput;
 Scanner input = new Scanner(System.in);
 boolean isPhoneNumberEntered;
 
@@ -67,10 +117,10 @@ String tempPhoneNumber;
   System.out.println("What would you like to do today?");
   System.out.println("1. Add a contacts info                         2. Delete a contacts info");  
   System.out.println("3. Show all current contacts (by phone number) 4. Search for contacts by name");
-  System.out.println("5. Display all contacts and exit the Daily Bugle");
+  System.out.println("5. Exit the Daily Bugle");
   System.out.println(); 
-  userImput=Integer.parseInt(input.nextLine());
-    if (userImput == 1)
+  userInput=Integer.parseInt(input.nextLine());
+    if (userInput == 1)
     {
       ContactInfo contact  = new ContactInfo();
       System.out.println("What is their First Name?");
@@ -108,7 +158,7 @@ String tempPhoneNumber;
     
 
     String userNameInput;
-    if (userImput == 2)
+    if (userInput == 2)
     {
       System.out.println("Who's name will you be deleting?");
       userNameInput = input.nextLine();
@@ -120,31 +170,57 @@ String tempPhoneNumber;
         }
       }
     }
-    if (userImput == 3)
+    if (userInput == 3)
     {
       for (int i =0; i <contactList.size(); i++)
       {
       System.out.println(remainderNumberSortMethod(contactList,contactList.size()).get(i).getFullName());
       }   
     }
-    if (userImput == 4)
+    
+String searchKey;    
+    if (userInput == 4)
     {
-      System.out.println("User picked 4");
-    }         
-  }while(userImput!=5);
+    contactList = remainderNameSortMethod(contactList, contactList.size());  
+    do {
+    System.out.println("What is the full name of the person you are looking for?");
+    searchKey = input.nextLine();  
+
+    if (binarySearchMethod(contactList,searchKey)== -1)
+     {
+       System.out.println("This person does not exist and is a figment of your imagination");
+     }
+    else
+     {
+       for(int i =0; i<contactList.size();i++)
+       {
+         if(contactList.get(i).getFullName().equals(searchKey))
+         {
+            System.out.println(contactList.get(i).getFirstName());
+            System.out.println(contactList.get(i).getLastName()); 
+            System.out.println(contactList.get(i).getPhoneNumber());
+            System.out.println(contactList.get(i).getContactEmail());
+            System.out.println(contactList.get(i).getContactAge());
+            System.out.println();
+         }
+       }
+     }
+    } while(binarySearchMethod(contactList,searchKey)== -1);
+   }         
+  }while(userInput!=5);
 // When doing each varable will have the same name but wont give 2 shits !!!!!
     
-//output
-   if (userImput == 5){
-   for (int i = 0; i< contactList.size(); i++)
-     {
-      System.out.println(contactList.get(i).getFirstName());
-      System.out.println(contactList.get(i).getLastName()); 
-      System.out.println(contactList.get(i).getPhoneNumber());
-      System.out.println(contactList.get(i).getContactEmail());
-      System.out.println(contactList.get(i).getContactAge());
-      System.out.println();
-     }
+//output   
+   FileWriter myWriter = new FileWriter (myFile);
+    for (int i= 0; i<contactList.size(); i++)
+    {
+    myWriter.write(contactList.get(i).getFirstName()+"\n");
+    myWriter.write(contactList.get(i).getLastName()+"\n");
+    myWriter.write(contactList.get(i).getPhoneNumber()+"\n");
+    myWriter.write(contactList.get(i).getContactEmail()+"\n");
+    myWriter.write(contactList.get(i).getContactAge()+"\n");
     }
+    myWriter.close(); 
+   
   }
 }
